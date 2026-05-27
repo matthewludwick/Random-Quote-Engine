@@ -1,3 +1,6 @@
+// Typography configuration rules
+const fonts = ["Qwitcher Grypen", "Tulpen One", "Shadows Into Light"];
+var rotating = 0; // Tracks which font index to apply next
 /**
  * Full-Stack Fetch Sandbox Core Script
  */
@@ -10,7 +13,7 @@ document.getElementById("fetchData").addEventListener("click", getRandomQuote);
 function getRandomQuote() {
   clearDisplayErrors();
 
-  fetch("server.php")
+  fetch("https://newmanix.com/classes/it102/random_quotes.php")
     .then((res) => {
       if (!res.ok) {
         throw new Error(`HTTP Error Status: ${res.status}`);
@@ -23,7 +26,13 @@ function getRandomQuote() {
       //document.getElementById("result").innerHTML = data;
       const quoteContainer = document.getElementById("result");
       quoteContainer.innerHTML = data;
-      
+      // --- TYPOGRAPHY LOOP ROTATION ---
+      // 1. Set the element's inline font-family to the current font index matching our counter
+      quoteContainer.style.fontFamily = fonts[rotating];
+      // 2. Add 1 to counter. The % remainder operator forces it to cycle back to 0 when it hits the limit!
+      rotating = (rotating + 1) % fonts.length;
+
+
       // --- TRANSITION CONTROLLER ---
       // Remove the class, force a browser reflow trick, then re-add the class
       quoteContainer.classList.remove("fade-in");

@@ -1,6 +1,9 @@
+
 <?php
 header("Content-Type: text/plain; charset=UTF-8");
 header("Cache-Control: no-cache, must-revalidate");
+header("Access-Control-Allow-Origin: *");
+
 
 $quotes = [
     "Be yourself; everyone else is already taken. — Oscar Wilde",
