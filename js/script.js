@@ -5,7 +5,49 @@
 // --- GLOBAL DEVELOPMENT SETTINGS ---
 // Modes available: "console" (quiet logging) or "screen" (renders error box in UI)
 const ERROR_MODE = "screen"; 
+document.getElementById("fetchData").addEventListener("click", getRandomQuote);
 
+function getRandomQuote() {
+  clearDisplayErrors();
+
+  fetch("server.php")
+    .then((res) => {
+      if (!res.ok) {
+        throw new Error(`HTTP Error Status: ${res.status}`);
+      }
+      return res.text();
+    })
+    .then((data) => {
+      
+      // Dump raw unstyled text straight into the container
+      //document.getElementById("result").innerHTML = data;
+      const quoteContainer = document.getElementById("result");
+      quoteContainer.innerHTML = data;
+      
+      // --- TRANSITION CONTROLLER ---
+      // Remove the class, force a browser reflow trick, then re-add the class
+      quoteContainer.classList.remove("fade-in");
+      void quoteContainer.offsetWidth; 
+      quoteContainer.classList.add("fade-in"); 
+      })
+      
+
+    .catch((err) => {
+      handleRoutingError(err);
+    });
+}
+
+
+// --- AUTOMATION ENGINE ---
+// 1. Run the function immediately when the DOM layout is loaded stable
+document.addEventListener("DOMContentLoaded", () => {
+    getRandomQuote(); 
+    
+    // 2. Set an infinite recurring timer loop (5000ms = 5 seconds)
+    setInterval(getRandomQuote, 5000);
+});
+
+/*
 document.getElementById("fetchData").addEventListener("click", () => {
   
   // Clear out any stale errors from a previous click attempt
@@ -29,7 +71,7 @@ document.getElementById("fetchData").addEventListener("click", () => {
       handleRoutingError(err);
     });
 });
-
+*/
 /**
  * Dispatches errors to the chosen target based on configuration
  */
@@ -53,3 +95,5 @@ function clearDisplayErrors() {
   errorBox.textContent = "";
   errorBox.style.display = "none";
 }
+
+
